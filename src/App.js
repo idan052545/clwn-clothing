@@ -4,7 +4,6 @@ import "./App.css";
 import HomePage from "./pages/homepage/cHomepage";
 import ShopPage from "./pages/shop/cShop";
 import CheckoutPage from "./pages/checkout/cCheckout";
-
 import Header from "./components/header/cHeader.jsx";
 import SignInAndSignUpPage from "./pages/signInUp/cSignInUp";
 import { auth, createUserProfileDocument } from "./firebase/uFirebase";
@@ -12,6 +11,7 @@ import { connect } from "react-redux";
 import { setCurrentUser } from "./redux/user/user.actions";
 import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "./redux/user/user.selectors";
+
 class App extends React.Component {
   unsubscribeFromAuth = null;
 
