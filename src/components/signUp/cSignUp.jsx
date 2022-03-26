@@ -1,13 +1,14 @@
 import React from "react";
-import { auth, createUserProfileDocument } from "../../firebase/uFirebase";
+import { connect } from "react-redux";
+import { SignUpStart } from "../../redux/user/user.actions";
 import CustomButton from "../customButton/cCustomButton";
 import FormInput from "../formInput/cFormInput";
 
 import "./sSignUp.scss";
 
 class SignUp extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       displayName: "",
@@ -19,30 +20,21 @@ class SignUp extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-
+    const { SignUpStart } = this.props;
     const { displayName, email, password, confirmPassword } = this.state;
 
     if (password !== confirmPassword) {
       alert("passwords don't match");
       return;
     }
+    SignUpStart({ email, password, displayName });
 
-    try {
-      const { user } = await auth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
-      await createUserProfileDocument(user, { displayName });
-
-      this.setState({
-        displayName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    this.setState({
+      displayName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
   };
 
   handleChange = (event) => {
@@ -89,18 +81,16 @@ class SignUp extends React.Component {
             label="Confirm Password"
             required
           />
-          <FormInput
-            type="confirmPassword"
-            name="confirmPassword"
-            value={confirmPassword}
-            onChange={this.handleChange}
-            label="Confirm Password"
-            required
-          />
+
           <CustomButton type="submit">SIGN UP</CustomButton>
         </form>
       </div>
     );
   }
 }
-export default SignUp;
+
+const mapDispatchToProps = (dispatch) => ({
+  SignUpStart: (user) => dispatch(SignUpStart(user)),
+});
+
+export default connect(null, mapDispatchToProps)(SignUp);
